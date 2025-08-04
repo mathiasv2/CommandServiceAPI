@@ -23,22 +23,22 @@ namespace CommandeServiceAPI.Service
         }
 
 
-        public async Task<ProductCache> GetProductCacheById(int productId)
+        public async Task<ProductCache> GetProductCacheByProductId(int productId)
         {
-            ProductCache product = await _dbContext.Products.FindAsync(productId);
+            ProductCache? product = _dbContext.Products.FirstOrDefault(x => x.ProductId == productId) ;
             return product;
         }
 
         public async Task RemoveProductCache(int productId)
         {
-            var product = await GetProductCacheById(productId);
+            var product = await GetProductCacheByProductId(productId);
             _dbContext.Remove(product);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateProductCache(UpdateProductDTO productDTO)
         {
-            ProductCache product = await GetProductCacheById(productDTO.Id);
+            ProductCache product = await GetProductCacheByProductId(productDTO.Id);
 
             product.ProductName  = productDTO.Name;
             product.ProductPriceAtOrder = productDTO.Price;
