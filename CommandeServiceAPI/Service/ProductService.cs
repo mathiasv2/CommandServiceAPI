@@ -32,7 +32,12 @@ namespace CommandeServiceAPI.Service
         public async Task RemoveProductCache(int productId)
         {
             var product = await GetProductCacheByProductId(productId);
-            _dbContext.Remove(product);
+            if (product == null)
+            {
+                Console.WriteLine($"Produit avec ProductId={productId} introuvable dans le cache.");
+                throw new Exception("Produit non trouvé dans le cache");
+            }
+            _dbContext.Products.Remove(product);
             await _dbContext.SaveChangesAsync();
         }
 
