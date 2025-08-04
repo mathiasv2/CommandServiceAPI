@@ -9,6 +9,11 @@ namespace CommandeServiceAPI.Consumers
 	{
         private ProductService _productService { get; set; }
 
+        public DeleteProductConsumer(ProductService productService)
+        {
+            _productService = productService;
+        }
+
         public async Task Consume(ConsumeContext<DeleteProductDTO> context)
         {
             var product = context.Message;
