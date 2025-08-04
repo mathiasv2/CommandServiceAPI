@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using CommandeServiceAPI;
+using CommandeServiceAPI.Consumers;
 using CommandeServiceAPI.Database;
 using CommandeServiceAPI.Service;
 using MassTransit;
@@ -22,7 +23,9 @@ builder.Services.AddSwaggerGen();
 // MassTransit configuration
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<ProductConsumer>();
+    x.AddConsumer<CreateProductConsumer>();
+    x.AddConsumer<UpdateProductConsumer>();
+    x.AddConsumer<DeleteProductConsumer>();
 
     x.SetDefaultEndpointNameFormatter();
 
