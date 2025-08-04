@@ -8,26 +8,25 @@ using Shared.Messages;
 
 namespace CommandeServiceAPI
 {
-	public class ProductConsumer : IConsumer<ProductDTO>
+	public class CreateProductConsumer : IConsumer<CreateProductDTO>
 	{
         private ProductService _productService { get; set; }
 
-        public ProductConsumer(ProductService productService)
+        public CreateProductConsumer(ProductService productService)
         {
             _productService = productService;
         }
 
-        public async Task Consume(ConsumeContext<ProductDTO> context)
+        public async Task Consume(ConsumeContext<CreateProductDTO> context)
         {
             Console.WriteLine("Consomme bien le message");
             var product = context.Message;
 
             ProductCacheDTO productToAdd = new ProductCacheDTO
             {
-
                 ProductId = product.Id,
                 ProductName = product.Name,
-                ProductPriceAtOrder = product.Price
+                ProductPriceAtOrder = product.Price,
             };
 
             await _productService.CreateProductCache(productToAdd);
