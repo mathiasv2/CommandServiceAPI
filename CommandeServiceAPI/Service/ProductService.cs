@@ -23,18 +23,17 @@ namespace CommandeServiceAPI.Service
         }
 
 
-        public async Task<ProductCache> GetProductCacheByProductId(int productId)
+        public ProductCache GetProductCacheByProductId(int productId)
         {
-            ProductCache? product = _dbContext.Products.FirstOrDefault(x => x.ProductId == productId) ;
+            ProductCache? product = _dbContext.Products.FirstOrDefault(x => x.ProductId == productId);
             return product;
         }
 
         public async Task RemoveProductCache(int productId)
         {
-            var product = await GetProductCacheByProductId(productId);
+            var product = GetProductCacheByProductId(productId);
             if (product == null)
             {
-                Console.WriteLine($"Produit avec ProductId={productId} introuvable dans le cache.");
                 throw new Exception("Produit non trouvé dans le cache");
             }
             _dbContext.Products.Remove(product);
@@ -43,15 +42,18 @@ namespace CommandeServiceAPI.Service
 
         public async Task UpdateProductCache(UpdateProductDTO productDTO)
         {
-            ProductCache product = await GetProductCacheByProductId(productDTO.Id);
+            ProductCache product = GetProductCacheByProductId(productDTO.Id);
 
             product.ProductName  = productDTO.Name;
             product.ProductPriceAtOrder = productDTO.Price;
+            product.Quantity = productDTO.Quantity;
 
 
             await _dbContext.SaveChangesAsync();
 
         }
+
+
 
 
 

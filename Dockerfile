@@ -8,4 +8,4 @@ RUN dotnet restore "CommandeServiceAPI/CommandeServiceAPI.csproj"
 
 WORKDIR /app/CommandeServiceAPI
 
-ENTRYPOINT ["dotnet", "run", "--urls", "http://0.0.0.0:80"]
+ENTRYPOINT ["dotnet", "run", "--urls", "http://0.0.0.0:82"]

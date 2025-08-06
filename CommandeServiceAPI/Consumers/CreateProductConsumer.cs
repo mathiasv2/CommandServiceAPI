@@ -26,6 +26,7 @@ namespace CommandeServiceAPI
             {
                 ProductId = product.Id,
                 ProductName = product.Name,
+                Quantity = product.Quantity,
                 ProductPriceAtOrder = product.Price,
             };
 

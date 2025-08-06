@@ -21,7 +21,7 @@ namespace CommandeServiceAPI.Database
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.Quantity)
+                entity.Property(e => e.OrderDate)
                     .IsRequired();
             });
 
