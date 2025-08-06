@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandeServiceAPI.DTO;
+using CommandeServiceAPI.Models;
 using CommandeServiceAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace CommandeServiceAPI.Controllers
             _commandService = commandService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreateCommand(CreateCommandDTO createCommandDTO)
         {
             await _commandService.CreateCommande(createCommandDTO);
@@ -31,6 +32,13 @@ namespace CommandeServiceAPI.Controllers
                 Statut = "Commande créée en bdd",
                 createCommandDTO
             });
+        }
+
+        [HttpGet("Get/{commandId}")]
+        public async Task<IActionResult> GetCommand(int commandId)
+        {
+            Command command = await _commandService.GetCommandComplete(commandId);
+            return Ok(command);
         }
     }
 }

@@ -5,8 +5,7 @@ namespace CommandeServiceAPI.DTO
 {
 	public class CreateCommandDTO
 	{
-		public List<CommandProductDTO> ProductsOrdered { get; set; }
-		public DateTime OrderDate { get; set; }
+		public List<CreateCommandProductDTO> ProductsOrdered { get; set; }
 	}
 }
 

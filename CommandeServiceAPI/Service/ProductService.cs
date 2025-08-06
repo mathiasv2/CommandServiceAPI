@@ -22,6 +22,12 @@ namespace CommandeServiceAPI.Service
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task ReduceQuantityInDb(int productId,int quantity)
+        {
+            var product = GetProductCacheByProductId(productId);
+            product.Quantity -= quantity;
+            await _dbContext.SaveChangesAsync();
+        }
 
         public ProductCache GetProductCacheByProductId(int productId)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace CommandeServiceAPI.DTO
 {
-	public class CommandProductDTO
+	public class CreateCommandProductDTO
 	{
 		public int ProductId { get; set; }
 		public int QuantityOrdered { get; set; }
