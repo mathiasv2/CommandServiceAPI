@@ -37,7 +37,7 @@ namespace CommandeServiceAPI.Controllers
         [HttpGet("Get/{commandId}")]
         public async Task<IActionResult> GetCommand(int commandId)
         {
-            Command command = await _commandService.GetCommandComplete(commandId);
+            var command = await _commandService.GetCompleteCommand(commandId);
             return Ok(command);
         }
     }

@@ -71,15 +71,39 @@ namespace CommandeServiceAPI.Service
             return product;
         }
 
-        public async Task<Command> GetCommandComplete(int commandId)
+        public async Task<Command?> GetCommand(int commandId)
         {
-            Command? commandWithDetails = await _dbContext.Commands
+            Command? command = await _dbContext.Commands
             .Where(c => c.Id == commandId) 
             .Include(c => c.Command_Products)
                 .ThenInclude(cp => cp.ProductCache)
             .FirstOrDefaultAsync();
 
-            return commandWithDetails;
+            if (command == null)
+                throw new Exception("Commande n'existe pas");
+
+            return command;
+        }
+
+        public async Task<GetCommandCompleteDTO?> GetCompleteCommand(int commandId)
+        {
+            Command? command = await GetCommand(commandId);
+            if (command == null)
+                return null;
+
+            GetCommandCompleteDTO completeCommand = new GetCommandCompleteDTO
+            {
+
+                OrderDate = command.OrderDate,
+                Products = command.Command_Products.Select(x => new GetProductDTO
+                {
+                    ProductName = x.ProductCache.ProductName,
+                    ProductPriceAtOrder = x.ProductCache.ProductPriceAtOrder,
+                    QuantityOrdered = x.QuantityOrdered,
+                }).ToList()
+            };
+
+            return completeCommand;
         }
 
     }
