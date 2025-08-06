@@ -2,7 +2,9 @@
 using CommandeServiceAPI.Database;
 using CommandeServiceAPI.DTO;
 using CommandeServiceAPI.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Shared.Messages.ProductDTO;
 
 namespace CommandeServiceAPI.Service
 {
@@ -10,11 +12,13 @@ namespace CommandeServiceAPI.Service
 	{
         private CommandDbContext _dbContext { get; set; }
         private ProductService _productService { get; set; }
+        private IPublishEndpoint _publishEndpoint { get; set; }
 
-        public CommandService(CommandDbContext dbContext, ProductService productService)
+        public CommandService(CommandDbContext dbContext, ProductService productService, IPublishEndpoint publishEndpoint)
         {
             _dbContext = dbContext;
             _productService = productService;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task CreateCommande(CreateCommandDTO commandDTO)
@@ -44,6 +48,17 @@ namespace CommandeServiceAPI.Service
 
             await _dbContext.Command_Products.AddRangeAsync(command_Product);
             await _dbContext.SaveChangesAsync();
+
+            foreach (var item in command_Product)
+            {
+                UpdateProductQuantityDTO updateProduct = new UpdateProductQuantityDTO
+                {
+                    ProductId = item.ProductCacheId,
+                    Quantity = item.QuantityOrdered
+                };
+
+                await _publishEndpoint.Publish(updateProduct);
+            }
         }
 
         public bool IsQuantityCommandedSuperiorToStock(int productId, int quantity)
@@ -95,7 +110,7 @@ namespace CommandeServiceAPI.Service
             {
 
                 OrderDate = command.OrderDate,
-                Products = command.Command_Products.Select(x => new GetProductDTO
+                Products = command.Command_Products.Select(x => new DTO.GetProductDTO
                 {
                     ProductName = x.ProductCache.ProductName,
                     ProductPriceAtOrder = x.ProductCache.ProductPriceAtOrder,
